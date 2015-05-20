@@ -90,6 +90,7 @@ class BagWidget(QWidget):
         self.record_button.setIcon(QIcon.fromTheme('media-record'))
         self.load_button.setIcon(QIcon.fromTheme('document-open'))
         self.save_button.setIcon(QIcon.fromTheme('document-save'))
+        self.publish_clock_button.setIcon(QIcon.fromTheme('appointment-new'))
 
         self.play_button.clicked[bool].connect(self._handle_play_clicked)
         self.thumbs_button.clicked[bool].connect(self._handle_thumbs_clicked)
@@ -103,7 +104,7 @@ class BagWidget(QWidget):
         self.record_button.clicked[bool].connect(self._handle_record_clicked)
         self.load_button.clicked[bool].connect(self._handle_load_clicked)
         self.save_button.clicked[bool].connect(self._handle_save_clicked)
-        self.publish_clock_box.clicked[bool].connect(self._handle_clock_clicked)
+        self.publish_clock_button.clicked[bool].connect(self._handle_clock_clicked)
         self.graphics_view.mousePressEvent = self._timeline.on_mouse_down
         self.graphics_view.mouseReleaseEvent = self._timeline.on_mouse_up
         self.graphics_view.mouseMoveEvent = self._timeline.on_mouse_move
@@ -125,7 +126,7 @@ class BagWidget(QWidget):
         self.end_button.setEnabled(False)
         self.save_button.setEnabled(False)
 
-        self.publish_clock_box.setChecked(publish_clock)
+        self.publish_clock_button.setChecked(publish_clock)
 
         self._recording = False
 
