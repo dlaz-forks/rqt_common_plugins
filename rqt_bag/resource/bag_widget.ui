@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>943</width>
-    <height>325</height>
+    <width>1116</width>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -238,6 +238,16 @@
        </property>
        <property name="checkable">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="publish_clock_box">
+       <property name="toolTip">
+        <string>Publish Clock</string>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>

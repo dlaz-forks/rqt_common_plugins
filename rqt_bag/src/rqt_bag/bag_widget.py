@@ -103,6 +103,7 @@ class BagWidget(QWidget):
         self.record_button.clicked[bool].connect(self._handle_record_clicked)
         self.load_button.clicked[bool].connect(self._handle_load_clicked)
         self.save_button.clicked[bool].connect(self._handle_save_clicked)
+        self.publish_clock_box.clicked[bool].connect(self._handle_clock_clicked)
         self.graphics_view.mousePressEvent = self._timeline.on_mouse_down
         self.graphics_view.mouseReleaseEvent = self._timeline.on_mouse_up
         self.graphics_view.mouseMoveEvent = self._timeline.on_mouse_move
@@ -123,6 +124,8 @@ class BagWidget(QWidget):
         self.begin_button.setEnabled(False)
         self.end_button.setEnabled(False)
         self.save_button.setEnabled(False)
+
+        self.publish_clock_box.setChecked(publish_clock)
 
         self._recording = False
 
@@ -167,6 +170,12 @@ class BagWidget(QWidget):
         self.shutdown_all()
 
         event.accept()
+
+    def _handle_clock_clicked(self, event):
+        self.publish_clock = event
+        self._timeline._publish_clock = event
+        if self._timeline._player:
+            self._timeline._player.start_clock_publishing()
 
     def _resizeEvent(self, event):
         # TODO The -2 allows a buffer zone to make sure the scroll bars do not appear when not needed. On some systems (Lucid) this doesn't function properly
