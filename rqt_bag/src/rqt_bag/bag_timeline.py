@@ -57,7 +57,7 @@ class BagTimeline(QGraphicsScene):
     status_bar_changed_signal = Signal()
     selected_region_changed = Signal(rospy.Time, rospy.Time)
 
-    def __init__(self, context, publish_clock):
+    def __init__(self, context, publish_clock, skip_empty=False):
         """
         :param context: plugin context hook to enable adding rqt_bag plugin widgets as ROS_GUI snapin panes, ''PluginContext''
         """
@@ -91,6 +91,7 @@ class BagTimeline(QGraphicsScene):
         self._play_timer = QTimer()
         self._play_timer.timeout.connect(self.on_idle)
         self._play_timer.setInterval(3)
+        self._skip_empty = False
 
         # Plugin popup management
         self._context = context
@@ -519,6 +520,15 @@ class BagTimeline(QGraphicsScene):
             for topic in self._timeline_frame.topics:
                 self.stop_publishing(topic)
 
+    # property: skip empty
+    def _get_skip_empty(self):
+        return self._skip_empty
+
+    def _set_skip_empty(self, skip_empty):
+        self._skip_empty = skip_empty
+
+    skip_empty = property(_get_skip_empty, _set_skip_empty)
+
     # property: play_all
     def _get_play_all(self):
         return self._play_all
@@ -554,6 +564,13 @@ class BagTimeline(QGraphicsScene):
 
         if self._play_all:
             self.step_next_message()
+        elif self._skip_empty and self.last_frame:
+            next_message_time = self.get_next_message_time()
+            if (next_message_time - self.last_playhead).to_sec() <= self._skip_empty:
+                self.step_fixed()
+            else:
+                self.last_playhead = self._timeline_frame.playhead
+                self._timeline_frame.playhead = next_message_time
         else:
             self.step_fixed()
 

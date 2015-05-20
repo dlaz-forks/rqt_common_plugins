@@ -91,6 +91,7 @@ class BagWidget(QWidget):
         self.load_button.setIcon(QIcon.fromTheme('document-open'))
         self.save_button.setIcon(QIcon.fromTheme('document-save'))
         self.publish_clock_button.setIcon(QIcon.fromTheme('appointment-new'))
+        self.skip_empty_button.setIcon(QIcon.fromTheme('format-justify-left'))
 
         self.play_button.clicked[bool].connect(self._handle_play_clicked)
         self.thumbs_button.clicked[bool].connect(self._handle_thumbs_clicked)
@@ -105,6 +106,7 @@ class BagWidget(QWidget):
         self.load_button.clicked[bool].connect(self._handle_load_clicked)
         self.save_button.clicked[bool].connect(self._handle_save_clicked)
         self.publish_clock_button.clicked[bool].connect(self._handle_clock_clicked)
+        self.skip_empty_button.clicked[bool].connect(self._handle_skip_empty_clicked)
         self.graphics_view.mousePressEvent = self._timeline.on_mouse_down
         self.graphics_view.mouseReleaseEvent = self._timeline.on_mouse_up
         self.graphics_view.mouseMoveEvent = self._timeline.on_mouse_move
@@ -177,6 +179,9 @@ class BagWidget(QWidget):
         self._timeline._publish_clock = event
         if self._timeline._player:
             self._timeline._player.start_clock_publishing()
+
+    def _handle_skip_empty_clicked(self, event):
+        self._timeline.skip_empty = event * 0.5
 
     def _resizeEvent(self, event):
         # TODO The -2 allows a buffer zone to make sure the scroll bars do not appear when not needed. On some systems (Lucid) this doesn't function properly
